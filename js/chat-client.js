@@ -58,5 +58,5 @@ $('form#form-message').submit(function (event) {
 
 let enterChat = () => {
     $('#chat-connect').hide();
-    $('#chat-room').fadeIn('fast');
+    $('#chat-room').fadeIn();
 };
