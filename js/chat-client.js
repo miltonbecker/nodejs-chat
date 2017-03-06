@@ -1,10 +1,15 @@
 'use strict';
 let socket;
 
+let hostname = 'localhost';
 let port = process.env.PORT || 8080;
+if (port != 8080) {
+    hostname = 'young-wildwood-53498.herokuapp.com';
+}
+
 
 let connect = (name) => {
-    socket = io.connect('http://localhost:' + port);
+    socket = io.connect(`${hostname}:${port}`);
     events();
     socket.emit('join', name);
 };
