@@ -2,7 +2,7 @@
 let socket;
 
 let hostname = 'localhost';
-let port = process.env.PORT || 8080;
+let port = 80;
 if (port != 8080) {
     hostname = 'young-wildwood-53498.herokuapp.com';
 }
