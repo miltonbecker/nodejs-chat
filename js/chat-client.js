@@ -9,7 +9,7 @@ if (port != 8080) {
 
 
 let connect = (name) => {
-    socket = io.connect(`${hostname}:${port}`);
+    socket = io.connect(`${hostname}`);
     events();
     socket.emit('join', name);
 };
