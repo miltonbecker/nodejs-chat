@@ -19,6 +19,8 @@ app.use('/js', express.static(path.resolve(__dirname)));
 
 chatServer.init(server);
 
-server.listen(8080, function () {
-    console.log('Listening on port %d...', 8080);
+let port = process.env.PORT || 8080;
+
+server.listen(port, function () {
+    console.log('Listening on port %d...', port);
 });

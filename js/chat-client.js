@@ -1,8 +1,10 @@
 'use strict';
 let socket;
 
+let port = process.env.PORT || 8080;
+
 let connect = (name) => {
-    socket = io.connect('http://localhost:8080');
+    socket = io.connect('http://localhost:' + port);
     events();
     socket.emit('join', name);
 };
