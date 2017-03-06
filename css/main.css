@@ -1,0 +1,12 @@
+#chat-connect p {
+    display: none;
+}
+
+#chat-room {
+    display: none;
+}
+
+#form-message input {
+    padding-right: 100px !important;
+    margin-right: 100px;
+}

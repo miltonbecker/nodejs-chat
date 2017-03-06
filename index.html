@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Node Chat</title>
+    <link href="/lib/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+    <link href="/css/main.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container">
+        <h1>Real-time Chat</h1>
+
+        <div id="chat-connect">
+            <form class="form-inline" id="form-connect">
+                <div class="form-group">
+                    <label for="name" class="sr-only">Name</label>
+                    <input type="text" class="form-control" id="name" placeholder="Name">
+                </div>
+                <button type="submit" class="btn btn-success" id="connect-button">Connect</button>
+            </form>
+            <p id="connect-error" class="alert alert-warning col-md-5 col-sm-8 col-xs-12"></p>
+        </div>
+
+        <div id="chat-room">
+            <p id="welcome">&nbsp;</p>
+
+            <div class="row">
+                <div class="col-md-9 col-sm-11 col-xs-12">
+                    <textarea id="chat" rows="10" class="col-xs-12" readonly></textarea>
+                </div>
+            </div>
+
+            <form id="form-message">
+                <div class="form-group">
+                    <div class="row">
+                        <div class="col-md-9 col-sm-11 col-xs-12">
+                            <div class="input-group">
+                                <input type="text" class="form-control" id="message" placeholder="Type a message here" autocomplete="off">
+                                <span class="input-group-btn"><button type="submit" class="btn btn-info" id="message-button">Send</button></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+
+    </div>
+
+
+    <script src="/lib/jquery/dist/jquery.min.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/lib/socket.io-client/dist/socket.io.min.js"></script>
+    <script src="/js/chat-client.js"></script>
+</body>
+
+</html>
