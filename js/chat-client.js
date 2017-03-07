@@ -6,7 +6,6 @@ let hostname = location.hostname;
 if (hostname !== 'localhost') {
     port = 80;
 }
-console.log('hostname: ' + hostname)
 
 let connect = (name) => {
     if (port === 80) {
