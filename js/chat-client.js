@@ -1,26 +1,35 @@
 'use strict';
 let socket;
 
-let port = 8080;
-let hostname = location.hostname;
-if (hostname !== 'localhost') {
-    port = 80;
-}
+function init() {
+    let port = 8080;
+    let hostname = location.hostname;
+    if (hostname.indexOf('herokuapp') === -1) {
+        port = 80;
+    }
 
-let connect = (name) => {
     if (port === 80) {
         socket = io.connect(`${hostname}`);
     } else {
         socket = io.connect(`${hostname}:${port}`);
     }
+
     events();
-    socket.emit('join', name);
 };
 
-let events = () => {
-    socket.on('connect', function () {
-        if (socket.connected) {
+init();
+
+function connect (name) {
+    socket.emit('joinRequest', name);
+};
+
+function events () {
+    socket.on('joinResponse', function (response) {
+        if (response) {
             enterChat();
+        } else {
+            showError('That name is being used already. Please, choose another one.')
+            $('#connect-button').prop('disabled', false);
         }
     });
 
@@ -28,12 +37,22 @@ let events = () => {
         $('#welcome').text(data);
     });
 
+    socket.on('people', function (data) {
+        $('#people').html('');
+        for (name of data) {
+            let listItem = $('<li>' + name + '</li>');
+            listItem.addClass('list-group-item');
+            listItem.addClass('col-xs-12');
+            $('#people').append(listItem);
+        }
+    });
+
     socket.on('message', function (data) {
         $('#chat').append(data + '&#xA;');
     });
 };
 
-let sendMessage = (message) => {
+function sendMessage (message) {
     socket.emit('message', message);
 };
 
@@ -42,24 +61,30 @@ $('form#form-connect').submit(function (event) {
 
     let name = $('#name').val().trim();
     if (!name.length) {
-        $('#connect-error').text('Pick a name!');
-        $('#connect-error').fadeIn('fast');
+        showError('Please, pick a name.')
         return;
     }
-            
+
     $('#connect-button').prop('disabled', true);
     connect(name);
 });
 
+function showError (message) {
+    $('#connect-error').text(message);
+    $('#connect-error').fadeIn('fast');
+};
+
 $('form#form-message').submit(function (event) {
     event.preventDefault();
 
-    let message = $('#message').val();
-    sendMessage(message);
+    let message = $('#message').val().trim();
+    if (message.length)
+        sendMessage(message);
     $('#message').val('');
 });
 
-let enterChat = () => {
+function enterChat () {
     $('#chat-connect').hide();
     $('#chat-room').fadeIn();
+    $('#message').focus();
 };

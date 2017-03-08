@@ -1,3 +1,7 @@
+textarea {
+    resize: none;
+}
+
 #chat-connect p {
     display: none;
 }
@@ -6,7 +10,16 @@
     display: none;
 }
 
-#form-message input {
-    padding-right: 100px !important;
-    margin-right: 100px;
+#people {
+    overflow: hidden;
+}
+
+.list-group {
+    margin: 0px;
+    padding: 0px;
+}
+
+.form-group {
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }

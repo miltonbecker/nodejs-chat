@@ -9,14 +9,14 @@
 </head>
 
 <body>
-    <div class="container">
+    <div class="container-fluid col-xs-12 col-sm-10 col-md-9">
         <h1>Real-time Chat</h1>
 
         <div id="chat-connect">
             <form class="form-inline" id="form-connect">
                 <div class="form-group">
                     <label for="name" class="sr-only">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name">
+                    <input type="text" class="form-control" id="name" placeholder="Name" autofocus>
                 </div>
                 <button type="submit" class="btn btn-success" id="connect-button">Connect</button>
             </form>
@@ -24,29 +24,30 @@
         </div>
 
         <div id="chat-room">
-            <p id="welcome">&nbsp;</p>
-
-            <div class="row">
-                <div class="col-md-9 col-sm-11 col-xs-12">
-                    <textarea id="chat" rows="10" class="col-xs-12" readonly></textarea>
+            <div class="panel panel-info">
+                <div class="panel-heading">
+                    <p id="welcome" class="panel-title">&nbsp;</p>
                 </div>
-            </div>
 
-            <form id="form-message">
-                <div class="form-group">
-                    <div class="row">
-                        <div class="col-md-9 col-sm-11 col-xs-12">
-                            <div class="input-group">
-                                <input type="text" class="form-control" id="message" placeholder="Type a message here" autocomplete="off">
-                                <span class="input-group-btn"><button type="submit" class="btn btn-info" id="message-button">Send</button></span>
-                            </div>
-                        </div>
+                <div class="row">
+                    <div class="col-xs-12">
+                        <textarea id="chat" rows="10" class="col-xs-9" readonly></textarea>
+                        <ul id="people" class="list-group col-xs-3">
+
+                        </ul>
                     </div>
                 </div>
-            </form>
 
+                <form id="form-message">
+                    <div class="form-group">
+                        <div class="input-group col-xs-12">
+                            <input type="text" class="form-control col-xs-9" id="message" placeholder="Type a message here" autocomplete="off">
+                            <span class="input-group-btn"><button type="submit" class="btn btn-info" id="message-button">Send</button></span>
+                        </div>
+                    </div>
+                </form>
+            </div>
         </div>
-
     </div>
 
 
