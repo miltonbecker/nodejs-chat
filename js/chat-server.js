@@ -24,7 +24,7 @@ let events = () => {
             client.emit('joinResponse', true);
             client.emit('welcome', `Welcome to the server, ${data}!`);
             this.io.emit('people', [ ...this.people ].sort());
-            client.broadcast.emit('message', `>> User ${data} joined the channel`);
+            client.broadcast.emit('message', `>> User ${data} joined the chat`);
         });
 
         client.on('message', (data) => {
@@ -35,7 +35,7 @@ let events = () => {
         client.on('disconnect', () => {
             this.people.delete(client.name);
             this.io.emit('people', [ ...this.people ].sort());
-            this.io.emit('message', `<< User ${client.name} left the channel`);
+            this.io.emit('message', `<< User ${client.name} left the chat`);
         });
     });
 }
