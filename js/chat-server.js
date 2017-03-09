@@ -22,7 +22,7 @@ let events = () => {
             this.people.add(data);
             client.name = data;
             client.emit('joinResponse', true);
-            client.emit('welcome', `Welcome to the server, ${data}!`);
+            client.emit('welcome', `Welcome to the chat, ${data}!`);
             this.io.emit('people', [ ...this.people ].sort());
             client.broadcast.emit('message', `>> User ${data} joined the chat`);
         });
