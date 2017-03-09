@@ -1,6 +1,8 @@
 'use strict';
 let socket;
 
+init();
+
 function init() {
     let port = 8080;
     let hostname = location.hostname;
@@ -16,8 +18,6 @@ function init() {
 
     events();
 };
-
-init();
 
 function connect (name) {
     socket.emit('joinRequest', name);
@@ -56,6 +56,17 @@ function sendMessage (message) {
     socket.emit('message', message);
 };
 
+function showError (message) {
+    $('#connect-error').text(message);
+    $('#connect-error').fadeIn('fast');
+};
+
+function enterChat () {
+    $('#chat-connect').hide();
+    $('#chat-room').fadeIn();
+    $('#message').focus();
+};
+
 $('form#form-connect').submit(function (event) {
     event.preventDefault();
 
@@ -69,11 +80,6 @@ $('form#form-connect').submit(function (event) {
     connect(name);
 });
 
-function showError (message) {
-    $('#connect-error').text(message);
-    $('#connect-error').fadeIn('fast');
-};
-
 $('form#form-message').submit(function (event) {
     event.preventDefault();
 
@@ -83,8 +89,3 @@ $('form#form-message').submit(function (event) {
     $('#message').val('');
 });
 
-function enterChat () {
-    $('#chat-connect').hide();
-    $('#chat-room').fadeIn();
-    $('#message').focus();
-};

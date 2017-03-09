@@ -21,21 +21,21 @@ let events = () => {
             } 
             this.people.add(data);
             client.name = data;
-            client.emit('welcome', `Welcome to the server, ${data}!`);
             client.emit('joinResponse', true);
-            client.emit('people', [ ...this.people ].sort());
-            client.broadcast.emit('people', [ ...this.people ].sort());
+            client.emit('welcome', `Welcome to the server, ${data}!`);
+            this.io.emit('people', [ ...this.people ].sort());
+            client.broadcast.emit('message', `>> User ${data} joined the channel`);
         });
 
         client.on('message', (data) => {
             let message = `${client.name}: ${data}`;
-            client.emit('message', message);
-            client.broadcast.emit('message', message);
+            this.io.emit('message', message);
         });
 
         client.on('disconnect', () => {
             this.people.delete(client.name);
             this.io.emit('people', [ ...this.people ].sort());
+            this.io.emit('message', `<< User ${client.name} left the channel`);
         });
     });
 }
