@@ -4,7 +4,7 @@ let socket;
 function init() {
     let port = 8080;
     let hostname = location.hostname;
-    if (hostname.indexOf('herokuapp') === -1) {
+    if (hostname.indexOf('herokuapp') !== -1) {
         port = 80;
     }
 
