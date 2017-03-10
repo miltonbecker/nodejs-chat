@@ -34,7 +34,7 @@ function events () {
     });
 
     socket.on('welcome', function (data) {
-        $('#welcome').text(data);
+        $('#welcome').html(data);
     });
 
     socket.on('people', function (data) {
