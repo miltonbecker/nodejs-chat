@@ -1,42 +1,98 @@
 'use strict';
 let socket = require('socket.io');
+let redis = require('redis');
 
+let dbClient = redis.createClient();
+
+/** @type {SocketIO.Server} */
 let io;
-let people;
+
+const PEOPLE = 'chat-people';
 
 let init = (server) => {
+    dbClient.del(PEOPLE);
     this.io = socket(server);
-    this.people = new Set();
     events();
 }
 
 let events = () => {
-    this.io.on('connection', (client) => {
-        console.log('client connected');
 
-        client.on('joinRequest', (data) => {
-            if (this.people.has(data)) {
-                client.emit('joinResponse', false);
-                return;
-            } 
-            this.people.add(data);
-            client.name = data;
-            client.emit('joinResponse', true);
-            client.emit('welcome', `Welcome to the chat, ${data}!`);
-            this.io.emit('people', [ ...this.people ].sort());
-            client.broadcast.emit('message', `>> User ${data} joined the chat`);
-        });
+    this.io.on('connection',
+        /**
+         * @param  {SocketIO.Socket} client
+         */
+        (client) => {
+            console.log('client connected: ' + client.request.connection.remoteAddress);
 
-        client.on('message', (data) => {
-            let message = `${client.name}: ${data}`;
-            this.io.emit('message', message);
-        });
+            client.on('join-request', (data) => {
+                dbClient.sadd(PEOPLE, data, (err, response) => {
+                    if (!response) {
+                        client.emit('join-response', false);
+                        return;
+                    }
+                    client.name = data;
+                    okToJoin(client);
+                });
 
-        client.on('disconnect', () => {
-            this.people.delete(client.name);
-            this.io.emit('people', [ ...this.people ].sort());
-            this.io.emit('message', `<< User ${client.name} left the chat`);
+            });
+
+            client.on('message', (data) => {
+                let message = `${client.name}: ${data}`;
+                this.io.emit('message', message);
+                saveMessage(message);
+            });
+
+            client.on('delete-msgs', (data) => {
+                if (client.name) {
+                    dbClient.del('messages', function (err, res) {
+                        let response;
+                        if (err) {
+                            response = 'There was an error deleting the messages from the server.';
+                        } else {
+                            if (res) {
+                                response = 'Messages deleted from the server successfully!'
+                            } else {
+                                response = 'There was no message to delete from the server.'
+                            }
+                        }
+                        client.emit('delete-msgs-result', response);
+                    });
+                }
+            });
+
+            client.on('disconnect', () => {
+                if (client.name) {
+                    dbClient.srem(PEOPLE, client.name);
+                    dbClient.smembers(PEOPLE, (err, response) => {
+                        this.io.emit('people', response.sort());
+                    });
+                    this.io.emit('message', `<< User ${client.name} left the chat`);
+                }
+            });
         });
+}
+
+let okToJoin = (client) => {
+    client.emit('join-response', true);
+    client.emit('welcome', `Welcome to the chat, ${client.name}!`);
+
+    dbClient.smembers(PEOPLE, (err, response) => {
+        this.io.emit('people', response.sort());
+    });
+
+    client.broadcast.emit('message', `>> User ${client.name} joined the chat`);
+
+    dbClient.lrange('messages', 0, -1, function (err, messages) {
+        messages = messages.reverse();
+        messages.forEach(function (message) {
+            client.emit('message', message);
+        });
+    });
+}
+
+let saveMessage = (message) => {
+    dbClient.lpush('messages', message, function (err, response) {
+        dbClient.ltrim('messages', 0, 9);
     });
 }
 

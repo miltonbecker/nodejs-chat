@@ -10,21 +10,27 @@
 
 <body>
     <div class="container-fluid col-xs-12 col-sm-10 col-md-9">
-        <h1>Real-time Chat</h1>
+        <h2>Real-time Chat
+            <div class="pull-right">
+                <button id="delete-msg" class="btn btn-sm btn-danger">Delete Messages</button>
+                <button id="disconnect" class="btn btn-sm btn-warning">Disconnect</button>
+            </div>
+        </h2>
 
         <div id="chat-connect">
-            <form class="form-inline" id="form-connect">
+            <form id="form-connect">
                 <div class="form-group">
-                    <label for="name" class="sr-only">Name</label>
-                    <input type="text" class="form-control" id="name" placeholder="Name" autofocus>
+                    <div class="input-group col-xs-12">
+                        <input type="text" class="form-control col-xs-9" id="name" placeholder="Type your name" autofocus>
+                        <span class="input-group-btn"><button type="submit" class="btn btn-success" id="connect-button">Connect</button></span>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-success" id="connect-button">Connect</button>
             </form>
             <p id="connect-error" class="alert alert-warning col-md-5 col-sm-8 col-xs-12"></p>
         </div>
 
         <div id="chat-room">
-            <div class="panel panel-info">
+            <div class="panel panel-primary">
                 <div class="panel-heading">
                     <p id="welcome" class="panel-title">&nbsp;</p>
                 </div>
@@ -41,8 +47,8 @@
                 <form id="form-message">
                     <div class="form-group">
                         <div class="input-group col-xs-12">
-                            <input type="text" class="form-control col-xs-9" id="message" placeholder="Type a message here" autocomplete="off">
-                            <span class="input-group-btn"><button type="submit" class="btn btn-info" id="message-button">Send</button></span>
+                            <input type="text" class="form-control col-xs-9" id="message" placeholder="Type a message" autocomplete="off">
+                            <span class="input-group-btn"><button type="submit" class="btn btn-primary" id="message-button">Send</button></span>
                         </div>
                     </div>
                 </form>

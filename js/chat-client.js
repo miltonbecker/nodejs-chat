@@ -20,11 +20,11 @@ function init() {
 };
 
 function connect (name) {
-    socket.emit('joinRequest', name);
+    socket.emit('join-request', name);
 };
 
 function events () {
-    socket.on('joinResponse', function (response) {
+    socket.on('join-response', function (response) {
         if (response) {
             enterChat();
         } else {
@@ -50,6 +50,10 @@ function events () {
     socket.on('message', function (data) {
         $('#chat').append(data + '&#xA;');
     });
+
+    socket.on('delete-msgs-result', function (data) {
+        alert(data);
+    });
 };
 
 function sendMessage (message) {
@@ -64,6 +68,8 @@ function showError (message) {
 function enterChat () {
     $('#chat-connect').hide();
     $('#chat-room').fadeIn();
+    $('#disconnect').fadeIn();
+    $('#delete-msg').fadeIn();
     $('#message').focus();
 };
 
@@ -87,5 +93,13 @@ $('form#form-message').submit(function (event) {
     if (message.length)
         sendMessage(message);
     $('#message').val('');
+});
+
+$('#delete-msg').click(function (event) {
+    socket.emit('delete-msgs');
+});
+
+$('#disconnect').click(function (event) {
+    location.reload();
 });
 

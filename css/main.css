@@ -2,16 +2,16 @@ textarea {
     resize: none;
 }
 
-#chat-connect p {
-    display: none;
-}
-
-#chat-room {
+#chat-connect p, #chat-room, #delete-msg, #disconnect {
     display: none;
 }
 
 #people {
     overflow: hidden;
+}
+
+#chat-connect .form-group, #chat-connect button {
+    margin-bottom: 5px;
 }
 
 .list-group {
@@ -22,4 +22,25 @@ textarea {
 .form-group {
     padding-bottom: 0px;
     margin-bottom: 0px;
+}
+
+#chat-room textarea, #form-message input {
+    border-color: #337ab7;
+}
+
+#chat-room textarea {
+    border-left: 0px;
+    border-top: 0px;
+    border-bottom: 0px;
+}
+
+#form-message input {
+    border-left: 0px;
+    border-bottom: 0px;
+    border-right: 0px;
+}
+
+#people .list-group-item {
+    border-left: 0px;
+    border-right: 0px;
 }
