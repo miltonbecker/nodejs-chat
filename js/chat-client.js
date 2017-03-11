@@ -67,6 +67,7 @@ function showError (message) {
 
 function enterChat () {
     $('#chat-connect').hide();
+    $('#title').addClass('hidden-xs');
     $('#chat-room').fadeIn();
     $('#disconnect').fadeIn();
     $('#delete-msg').fadeIn();
