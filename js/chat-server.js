@@ -47,12 +47,12 @@ let events = () => {
                     dbClient.del('messages', function (err, res) {
                         let response;
                         if (err) {
-                            response = 'There was an error deleting the messages from the server.';
+                            response = 'There was an error deleting the cached messages from the server.';
                         } else {
                             if (res) {
-                                response = 'Messages deleted from the server successfully!'
+                                response = 'Cached messages deleted successfully from the server!'
                             } else {
-                                response = 'There was no message to delete from the server.'
+                                response = 'There was no cached message to delete from the server.'
                             }
                         }
                         client.emit('delete-msgs-result', response);
