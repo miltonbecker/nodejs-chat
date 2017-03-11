@@ -28,8 +28,9 @@ function events () {
         if (response) {
             enterChat();
         } else {
-            showError('That name is being used already. Please, choose another one.')
             $('#connect-button').prop('disabled', false);
+            $('#connect-button').text($('#connect-button').data('title'));
+            showError('That name is being used already. Please, choose another one.')
         }
     });
 
@@ -52,6 +53,9 @@ function events () {
     });
 
     socket.on('delete-msgs-result', function (data) {
+        $('#delete-msgs').prop('disabled', false);
+        $('#delete-msgs').text($('#delete-msgs').data('title'));
+        
         alert(data);
     });
 };
@@ -70,7 +74,7 @@ function enterChat () {
     $('#title').addClass('hidden-xs');
     $('#chat-room').fadeIn();
     $('#disconnect').fadeIn();
-    $('#delete-msg').fadeIn();
+    $('#delete-msgs').fadeIn();
     $('#message').focus();
 };
 
@@ -84,6 +88,7 @@ $('form#form-connect').submit(function (event) {
     }
 
     $('#connect-button').prop('disabled', true);
+    $('#connect-button').text('Connecting...');
     connect(name);
 });
 
@@ -96,11 +101,15 @@ $('form#form-message').submit(function (event) {
     $('#message').val('');
 });
 
-$('#delete-msg').click(function (event) {
+$('#delete-msgs').click(function (event) {
+    $(this).prop('disabled', true);
+    $(this).text('Deleting...');
     socket.emit('delete-msgs');
 });
 
 $('#disconnect').click(function (event) {
+    $(this).prop('disabled', true);
+    $(this).text('Disconnecting...');
     location.reload();
 });
 

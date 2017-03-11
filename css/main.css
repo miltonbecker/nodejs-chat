@@ -2,7 +2,7 @@ textarea {
     resize: none;
 }
 
-#chat-connect p, #chat-room, #delete-msg, #disconnect {
+#chat-connect p, #chat-room, #delete-msgs, #disconnect {
     display: none;
 }
 
