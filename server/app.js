@@ -8,17 +8,18 @@ let app = express();
 let server = http.createServer(app);
 
 app.get('/', function (req, res) {
-    res.sendFile(path.resolve(`${__dirname}/../index.html`));
+    res.sendFile(path.resolve(`${__dirname}/../client/pages/index.html`));
 });
 
 app.use('/lib', express.static(path.resolve(`${__dirname}/../node_modules`)));
 
-app.use('/css', express.static(path.resolve(`${__dirname}/../css`)));
+app.use('/css', express.static(path.resolve(`${__dirname}/../client/css`)));
 
-app.use('/js', express.static(path.resolve(__dirname)));
+app.use('/dist', express.static(path.resolve(`${__dirname}/../client/dist`)));
 
 chatServer.init(server);
 
+// Heroku support 
 let port = process.env.PORT || 8080;
 
 server.listen(port, function () {

@@ -10,6 +10,7 @@ textarea {
     overflow: hidden;
 }
 
+/* To give some space from the alert message */
 #chat-connect .form-group, #chat-connect button {
     margin-bottom: 5px;
 }

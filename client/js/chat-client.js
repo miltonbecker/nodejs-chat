@@ -1,9 +1,14 @@
 'use strict';
+import constants from '../../common/constants';
+
+const MSG_NAME_BEING_USED = 'That name is being used already. Please, choose another one.';
+const MSG_PICK_NAME = 'Please, pick a name.';
+
 let socket;
 
 init();
 
-function init() {
+function init () {
     let port = 8080;
     let hostname = location.hostname;
     if (hostname.indexOf('herokuapp') !== -1) {
@@ -20,25 +25,25 @@ function init() {
 };
 
 function connect (name) {
-    socket.emit('join-request', name);
+    socket.emit(constants.EV_JOIN_REQUEST, name);
 };
 
 function events () {
-    socket.on('join-response', function (response) {
+    socket.on(constants.EV_JOIN_RESPONSE, function (response) {
         if (response) {
             enterChat();
         } else {
             $('#connect-button').prop('disabled', false);
             $('#connect-button').text($('#connect-button').data('title'));
-            showError('That name is being used already. Please, choose another one.')
+            showError(MSG_NAME_BEING_USED)
         }
     });
 
-    socket.on('welcome', function (data) {
+    socket.on(constants.EV_WELCOME, function (data) {
         $('#welcome').html(data);
     });
 
-    socket.on('people', function (data) {
+    socket.on(constants.EV_PEOPLE, function (data) {
         $('#people').html('');
         for (name of data) {
             let listItem = $('<li>' + name + '</li>');
@@ -48,20 +53,21 @@ function events () {
         }
     });
 
-    socket.on('message', function (data) {
+    socket.on(constants.EV_MESSAGE, function (data) {
         $('#chat').append(data + '&#xA;');
+        scrollChatToBottom();
     });
 
-    socket.on('delete-msgs-result', function (data) {
+    socket.on(constants.EV_DELETE_MSGS_RESPONSE, function (response) {
         $('#delete-msgs').prop('disabled', false);
         $('#delete-msgs').text($('#delete-msgs').data('title'));
         
-        alert(data);
+        alert(response);
     });
 };
 
 function sendMessage (message) {
-    socket.emit('message', message);
+    socket.emit(constants.EV_MESSAGE, message);
 };
 
 function showError (message) {
@@ -78,12 +84,16 @@ function enterChat () {
     $('#message').focus();
 };
 
+function scrollChatToBottom() {
+    $('#chat').scrollTop($('#chat')[ 0 ].scrollHeight);
+}
+
 $('form#form-connect').submit(function (event) {
     event.preventDefault();
 
     let name = $('#name').val().trim();
     if (!name.length) {
-        showError('Please, pick a name.')
+        showError(MSG_PICK_NAME)
         return;
     }
 
@@ -104,7 +114,7 @@ $('form#form-message').submit(function (event) {
 $('#delete-msgs').click(function (event) {
     $(this).prop('disabled', true);
     $(this).text('Deleting...');
-    socket.emit('delete-msgs');
+    socket.emit(constants.EV_DELETE_MSGS_REQUEST);
 });
 
 $('#disconnect').click(function (event) {
