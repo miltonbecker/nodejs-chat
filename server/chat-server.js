@@ -11,14 +11,13 @@ let io;
 const DB_PEOPLE = 'chat-people';
 const DB_MESSAGES = 'chat-messages';
 
-let init = (server) => {
+function init(server) {
     dbClient.del(DB_PEOPLE);
     io = socket(server);
     events();
 }
 
-let events = () => {
-
+function events() {
     io.on(constants.EV_CONNECTION,
         /**
          * @param  {SocketIO.Socket} client
@@ -26,13 +25,15 @@ let events = () => {
         (client) => {
             console.log(`Client connected, ${client.request.connection._peername.family}: ${client.request.connection._peername.address}`);
 
-            client.on(constants.EV_JOIN_REQUEST, (data) => {
-                dbClient.sadd(DB_PEOPLE, data, (err, response) => {
+            client.on(constants.EV_JOIN_REQUEST, (name) => {
+                name = name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+
+                dbClient.sadd(DB_PEOPLE, name, (err, response) => {
                     if (!response) {
                         client.emit(constants.EV_JOIN_RESPONSE, false);
                         return;
                     }
-                    client.name = data;
+                    client.name = name;
                     okToJoin(client);
                 });
 
@@ -46,7 +47,7 @@ let events = () => {
 
             client.on(constants.EV_DELETE_MSGS_REQUEST, (data) => {
                 if (client.name) {
-                    dbClient.del(DB_MESSAGES, function (err, res) {
+                    dbClient.del(DB_MESSAGES, (err, res) => {
                         let response;
                         if (err) {
                             response = 'There was an error deleting the cached messages from the server.';
@@ -74,7 +75,7 @@ let events = () => {
         });
 }
 
-let okToJoin = (client) => {
+function okToJoin(client) {
     client.emit(constants.EV_JOIN_RESPONSE, true);
     client.emit(constants.EV_WELCOME, `Welcome to the chat, ${client.name}!`);
 
@@ -84,16 +85,16 @@ let okToJoin = (client) => {
 
     client.broadcast.emit(constants.EV_MESSAGE, `>> User ${client.name} joined the chat`);
 
-    dbClient.lrange(DB_MESSAGES, 0, -1, function (err, messages) {
+    dbClient.lrange(DB_MESSAGES, 0, -1, (err, messages) => {
         messages = messages.reverse();
-        messages.forEach(function (message) {
+        messages.forEach((message) => {
             client.emit(constants.EV_MESSAGE, message);
         });
     });
 }
 
-let saveMessage = (message) => {
-    dbClient.lpush(DB_MESSAGES, message, function (err, response) {
+function saveMessage(message) {
+    dbClient.lpush(DB_MESSAGES, message, (err, response) => {
         dbClient.ltrim(DB_MESSAGES, 0, 9);
     });
 }
