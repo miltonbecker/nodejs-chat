@@ -154,7 +154,7 @@ function events() {
             for (var _iterator = data[Symbol.iterator](), _step; !(_iteratorNormalCompletion = (_step = _iterator.next()).done); _iteratorNormalCompletion = true) {
                 name = _step.value;
 
-                var listItem = $('<li>' + name + '</li>');
+                var listItem = $('<li>', { text: name });
                 listItem.addClass('list-group-item');
                 listItem.addClass('col-xs-12');
                 $('#people').append(listItem);

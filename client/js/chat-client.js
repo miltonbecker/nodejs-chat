@@ -8,7 +8,7 @@ let socket;
 
 init();
 
-function init () {
+function init() {
     let port = 8080;
     let hostname = location.hostname;
     if (hostname.indexOf('herokuapp') !== -1) {
@@ -24,11 +24,11 @@ function init () {
     events();
 };
 
-function connect (name) {
+function connect(name) {
     socket.emit(constants.EV_JOIN_REQUEST, name);
 };
 
-function events () {
+function events() {
     socket.on(constants.EV_JOIN_RESPONSE, function (response) {
         if (response) {
             enterChat();
@@ -46,7 +46,7 @@ function events () {
     socket.on(constants.EV_PEOPLE, function (data) {
         $('#people').html('');
         for (name of data) {
-            let listItem = $('<li>' + name + '</li>');
+            let listItem = $('<li>', { text: name });
             listItem.addClass('list-group-item');
             listItem.addClass('col-xs-12');
             $('#people').append(listItem);
@@ -61,21 +61,21 @@ function events () {
     socket.on(constants.EV_DELETE_MSGS_RESPONSE, function (response) {
         $('#delete-msgs').prop('disabled', false);
         $('#delete-msgs').text($('#delete-msgs').data('title'));
-        
+
         alert(response);
     });
 };
 
-function sendMessage (message) {
+function sendMessage(message) {
     socket.emit(constants.EV_MESSAGE, message);
 };
 
-function showError (message) {
+function showError(message) {
     $('#connect-error').text(message);
     $('#connect-error').fadeIn('fast');
 };
 
-function enterChat () {
+function enterChat() {
     $('#chat-connect').hide();
     $('#title').addClass('hidden-xs');
     $('#chat-room').fadeIn();
