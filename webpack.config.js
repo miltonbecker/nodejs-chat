@@ -1,4 +1,3 @@
-require('babel-loader');
 const path = require('path');
 
 let config = {
