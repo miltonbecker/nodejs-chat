@@ -104,6 +104,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var MSG_NAME_BEING_USED = 'That name is being used already. Please, choose another one.';
 var MSG_PICK_NAME = 'Please, pick a name.';
+var MSG_CONFIRM_DELETE = 'Are you sure?';
 
 var socket = void 0;
 
@@ -234,6 +235,10 @@ $('form#form-message').submit(function (event) {
 
 $('#delete-msgs').click(function (event) {
     $(this).prop('disabled', true);
+    if (!confirm(MSG_CONFIRM_DELETE)) {
+        $(this).prop('disabled', false);
+        return;
+    }
     $(this).text('Deleting...');
     socket.emit(_constants2.default.EV_DELETE_MSGS_REQUEST);
 });

@@ -3,6 +3,7 @@ import constants from '../../common/constants';
 
 const MSG_NAME_BEING_USED = 'That name is being used already. Please, choose another one.';
 const MSG_PICK_NAME = 'Please, pick a name.';
+const MSG_CONFIRM_DELETE = 'Are you sure?';
 
 let socket;
 
@@ -113,6 +114,12 @@ $('form#form-message').submit(function (event) {
 
 $('#delete-msgs').click(function (event) {
     $(this).prop('disabled', true);
+    
+    if (!confirm(MSG_CONFIRM_DELETE)) {
+        $(this).prop('disabled', false);
+        return;
+    }
+
     $(this).text('Deleting...');
     socket.emit(constants.EV_DELETE_MSGS_REQUEST);
 });
