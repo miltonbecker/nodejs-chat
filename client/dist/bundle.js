@@ -177,7 +177,7 @@ function events() {
     });
 
     socket.on(_constants2.default.EV_MESSAGE, function (data) {
-        $('#chat').append(data + '&#xA;');
+        $('#chat').append(data.toString() + '&#xA;');
         scrollChatToBottom();
     });
 
@@ -235,10 +235,12 @@ $('form#form-message').submit(function (event) {
 
 $('#delete-msgs').click(function (event) {
     $(this).prop('disabled', true);
+
     if (!confirm(MSG_CONFIRM_DELETE)) {
         $(this).prop('disabled', false);
         return;
     }
+
     $(this).text('Deleting...');
     socket.emit(_constants2.default.EV_DELETE_MSGS_REQUEST);
 });

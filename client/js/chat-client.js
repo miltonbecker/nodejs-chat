@@ -55,7 +55,7 @@ function events() {
     });
 
     socket.on(constants.EV_MESSAGE, function (data) {
-        $('#chat').append(data + '&#xA;');
+        $('#chat').append(data.toString() + '&#xA;');
         scrollChatToBottom();
     });
 

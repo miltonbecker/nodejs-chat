@@ -1,0 +1,13 @@
+{
+  "apps": [
+    {
+      "name": "chat",
+      "script": "server/app.js",
+      "watch": false,
+      "merge_logs": true,
+      "env": {
+        "NODE_ENV": "production"
+      }
+    }
+  ]
+}
